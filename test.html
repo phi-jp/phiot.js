@@ -25,6 +25,7 @@
       <test-mount class='test'></test-mount>
       <test-countup class='test'></test-countup>
       <test-each class='test'></test-each>
+      <test-img class='test'></test-img>
     </div>
   </body>
 </html>
@@ -82,6 +83,16 @@
   </phiot-script>
 </test-each>
 
+<test-img>
+  <phiot-content type='jade'>
+    <img src='{this.src}' />
+    {this.src}
+  </phiot-content>
+  <phiot-script>
+    this.src = 'https://pbs.twimg.com/profile_images/473506797462896640/_M0JJ0v8.png';
+  </phiot-script>
+</test-img>
+
 </script>
 
 <script>
@@ -89,4 +100,5 @@ phiot.init();
 phiot.mount('test-mount');
 phiot.mount('test-countup');
 phiot.mount('test-each');
+phiot.mount('test-img');
 </script>
