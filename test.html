@@ -1,0 +1,92 @@
+<!doctype html>
+ 
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    
+    <title>${title}</title>
+    <meta name="description" content="${description}" />
+    
+    <script src='phiot.js'></script>
+    <style>
+    .test {
+      display: block;
+      box-shadow: 0px 0px 4px 0px #aaa;
+      margin: 1rem;
+      padding: 1rem;
+    }
+    </style>
+  </head>
+  <body>
+    <h1>phiot.js test</h1>
+    <div>
+      <test-mount class='test'></test-mount>
+      <test-countup class='test'></test-countup>
+      <test-each class='test'></test-each>
+    </div>
+  </body>
+</html>
+
+
+<script type='phiot/template'>
+
+<test-mount>
+  <phiot-content type='jade'>
+    <h2>Hello, {this.title}!</h2>
+  </phiot-content>
+  <phiot-script type='es6'>
+    this.title = 'Phiot.js';
+  </phiot-script>
+</test-mount>
+
+<test-countup>
+  <phiot-content type='jade'>
+    <p>
+      count: {this.count}
+      <button onclick='{this.click()}'>count up</button>
+    </p>
+  </phiot-content>
+  <phiot-script type='es6'>
+    this.count = 0;
+    this.click = function() {
+      this.count += 1;
+      this.update();
+    };
+  </phiot-script>
+</test-countup>
+
+<test-each>
+  <phiot-content type='jade'>
+    <button onclick='{this.click()}'>add</button>
+    <ul>
+      <li>[ start ]</li>
+      <li each='{this.list}'>[ {this.title} ]</li>
+      <li>[ end ]</li>
+    </ul>
+  </phiot-content>
+  <phiot-script type='es6'>
+    this.list = [
+      { title: 'hoge' },
+      { title: 'foo' },
+      { title: 'bar' },
+    ];
+    this.click = function() {
+      this.list.push({
+        title: 'add',
+      });
+
+      this.update();
+    };
+  </phiot-script>
+</test-each>
+
+</script>
+
+<script>
+phiot.init();
+phiot.mount('test-mount');
+phiot.mount('test-countup');
+phiot.mount('test-each');
+</script>
