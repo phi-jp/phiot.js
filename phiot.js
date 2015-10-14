@@ -85,7 +85,7 @@
     this._template = template;
     var content = template.content;
     if (template.style) {
-      content += '<style>' + template.style + '</style>';
+      content += '<style scoped>' + template.style + '</style>';
     }
     this.domElement.innerHTML = content;
 
