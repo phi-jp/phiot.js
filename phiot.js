@@ -7,6 +7,17 @@
     return Array.prototype.slice.call(arr);
   };
 
+  var globalEval = function(code, opts, self) {
+    // var func = new Function(opts, 'return (' + code + ');').bind(self);
+    // return func();
+
+    // var element = document.createElement('script');
+    // element.text = code;
+    // document.body.appendChild(element);
+    // document.body.removeChild(element);
+  };
+  window.globalEval = globalEval;
+
   phiot.init = function() {
     var self = this;
     this.templates = {};
@@ -68,11 +79,14 @@
   };
   Tag.prototype.bind = function(template, opts) {
     opts = opts || {};
-    eval(template.script);
+    eval(template.script, opts, this);
     // template.func.call(this);
 
     this._template = template;
-    var content = template.content + '<style>' + template.style + '</style>';
+    var content = template.content;
+    if (template.style) {
+      content += '<style>' + template.style + '</style>';
+    }
     this.domElement.innerHTML = content;
 
     this.update();

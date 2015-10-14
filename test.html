@@ -40,6 +40,11 @@
   <phiot-content type='jade'>
     <h2>Hello, {this.title}!</h2>
   </phiot-content>
+  <phiot-style>
+    h2 {
+      color: blue;
+    }
+  </phiot-style>
   <phiot-script type='es6'>
     this.title = opts.title || 'Phiot.js';
   </phiot-script>
