@@ -27,13 +27,13 @@
     });
   };
 
-  phiot.mount = function(query) {
+  phiot.mount = function(query, opts) {
     if (!document._tag) {
       new Tag(document);
     }
 
     var tag = document._tag;
-    tag.mount(query);
+    tag.mount(query, opts);
   };
 
   /*
@@ -43,7 +43,7 @@
     this.domElement = domElement;
     domElement._tag = this;
   };
-  Tag.prototype.mount = function(query) {
+  Tag.prototype.mount = function(query, opts) {
     var self = this;
     var elements = this.domElement.querySelectorAll(query);
     elements = Array.prototype.slice.call(elements);
@@ -54,7 +54,7 @@
       var template = phiot.templates[query];
 
       if (template) {
-        tag.bind(template);
+        tag.bind(template, opts);
       }
 
       tags.push(tag);
@@ -62,8 +62,10 @@
 
     return tags;
   };
-  Tag.prototype.bind = function(template) {
-    template.func.call(this);
+  Tag.prototype.bind = function(template, opts) {
+    opts = opts || {};
+    eval(template.script);
+    // template.func.call(this);
 
     this._template = template;
     var content = template.content + '<style>' + template.style + '</style>';
@@ -143,7 +145,7 @@
     'each': function(tag, key, value, element) {
       var result = eval(value);
       var parent = element.parentNode;
-      var template = new Template(element.outerHTML);
+      var template = phiot.templates[element.localName] || (new Template(element.outerHTML));
 
       result.forEach(function(data, i) {
         var cloned = element.cloneNode(true);
@@ -156,7 +158,7 @@
           var value = data[key];
           tag[key] = value;
         }
-        tag.bind(template);
+        tag.bind(template, data);
 
         // save replace position
         cloned.setAttribute('_each', i);

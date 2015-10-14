@@ -28,6 +28,7 @@
       <test-img class='test'></test-img>
       <test-timer class='test'></test-timer>
       <test-input class='test'></test-input>
+      <test-each-mount class='test'></test-each-mount>
     </div>
   </body>
 </html>
@@ -40,7 +41,7 @@
     <h2>Hello, {this.title}!</h2>
   </phiot-content>
   <phiot-script type='es6'>
-    this.title = 'Phiot.js';
+    this.title = opts.title || 'Phiot.js';
   </phiot-script>
 </test-mount>
 
@@ -126,6 +127,32 @@
   </phiot-script>
 </test-input>
 
+<test-each-mount>
+  <phiot-content type='jade'>
+    <button onclick='{this.click}'>add</button>
+    <ul>
+      <li>[ start ]</li>
+      <test-mount each='{this.list}'></test-mount>
+      <li>[ end ]</li>
+    </ul>
+  </phiot-content>
+  <phiot-script type='es6'>
+    this.list = [
+      { title: 'hoge' },
+      { title: 'foo' },
+      { title: 'bar' },
+    ];
+
+    this.click = function() {
+      this.list.push({
+        title: 'add',
+      });
+
+      this.update();
+    };
+  </phiot-script>
+</test-each-mount>
+
 </script>
 
 <script>
@@ -136,4 +163,6 @@ phiot.mount('test-each');
 phiot.mount('test-img');
 phiot.mount('test-timer');
 phiot.mount('test-input');
+phiot.mount('test-each-mount');
+
 </script>
