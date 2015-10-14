@@ -3,11 +3,15 @@
 
   var phiot = {};
 
+  var toArray = function(arr) {
+    return Array.prototype.slice.call(arr);
+  };
+
   phiot.init = function() {
     var self = this;
     this.templates = {};
 
-    var scripts = Array.prototype.slice.call(document.scripts);
+    var scripts = toArray(document.scripts);
     scripts = scripts.filter(function(script) {
       return script.type === 'phiot/template';
     });
@@ -19,7 +23,7 @@
       html = html.replace(/src=/g, 'phiot-src=');
       dom.innerHTML = html;
 
-      var tags = Array.prototype.slice.call(dom.children);
+      var tags = toArray(dom.children);
 
       tags.forEach(function(tag) {
         self.templates[tag.localName] = new Template(tag);
@@ -46,7 +50,7 @@
   Tag.prototype.mount = function(query, opts) {
     var self = this;
     var elements = this.domElement.querySelectorAll(query);
-    elements = Array.prototype.slice.call(elements);
+    elements = toArray(elements);
 
     var tags = [];
     elements.forEach(function(element) {
@@ -79,7 +83,7 @@
   Tag.prototype.update = function() {
     // supported each
     var eachElements = this.domElement.querySelectorAll('[_each]');
-    eachElements = Array.prototype.slice.call(eachElements);
+    eachElements = toArray(eachElements);
     eachElements.forEach(function(elm) {
       var i = elm.getAttribute('_each');
       if (i == 0) {
@@ -90,12 +94,12 @@
     });
 
     var elements = this.domElement.querySelectorAll('*');
-    elements = Array.prototype.slice.call(elements);
+    elements = toArray(elements);
     elements.unshift(this.domElement);
 
     elements.forEach(function(element) {
       // attribute
-      var attributes = Array.prototype.slice.call(element.attributes);
+      var attributes = toArray(element.attributes);
       attributes.forEach(function(attr) {
         var result = attr.textContent.match(/^{(.*)}$/);
         if (result) {
@@ -111,7 +115,7 @@
       if (!element.parentNode) return ;
 
       // content
-      var childNodes = Array.prototype.slice.call(element.childNodes);
+      var childNodes = toArray(element.childNodes);
       var texts = childNodes.filter(function(node) {
         return node.nodeType === 3;
       });
