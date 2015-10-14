@@ -111,13 +111,18 @@
 
   var attrfuncs = {
     '*': function(tag, key, value, element) {
-      key = key.replace('phiot-', '');
-      value = eval(value);
-      element.setAttribute(key, value);
+      // event
+      if (/^on/.test(key)) {
+        element[key] = new Function('e', value+'(e)').bind(this);
+      }
+      // other
+      else {
+        key = key.replace('phiot-', '');
+        value = eval(value);
+        element.setAttribute(key, value);
+      }
     },
-    'onclick': function(tag, key, value, element) {
-      element.onclick = new Function(value).bind(tag);
-    },
+
     'each': function(tag, key, value, element) {
       var result = eval(value);
 

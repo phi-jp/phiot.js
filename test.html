@@ -26,6 +26,8 @@
       <test-countup class='test'></test-countup>
       <test-each class='test'></test-each>
       <test-img class='test'></test-img>
+      <test-timer class='test'></test-timer>
+      <test-input class='test'></test-input>
     </div>
   </body>
 </html>
@@ -46,7 +48,7 @@
   <phiot-content type='jade'>
     <p>
       count: {this.count}
-      <button onclick='{this.click()}'>count up</button>
+      <button onclick='{this.click}'>count up</button>
     </p>
   </phiot-content>
   <phiot-script type='es6'>
@@ -93,12 +95,48 @@
   </phiot-script>
 </test-img>
 
+<test-timer>
+  <phiot-content type='jade'>
+    <p>Seconds Elapsed: { this.time }</p>
+  </phiot-content>
+  <phiot-script>
+    this.time = 0;
+    this.tick = function() {
+      this.time++;
+      this.update();
+    };
+    setInterval(function() {
+      this.tick();
+    }.bind(this));
+  </phiot-script>
+</test-timer>
+
+
+<test-input>
+  <phiot-content type='jade'>
+    <input type='text' oninput='{this.input}' value='{this.value}' />
+    {this.value}
+  </phiot-content>
+  <phiot-script>
+    this.value = 'hoge';
+
+    this.input = function(e) {
+      console.log(e);
+
+      this.value = e.target.value;
+      this.update();
+    };
+  </phiot-script>
+</test-input>
+
 </script>
 
 <script>
 phiot.init();
 phiot.mount('test-mount');
-phiot.mount('test-countup');
-phiot.mount('test-each');
-phiot.mount('test-img');
+// phiot.mount('test-countup');
+// phiot.mount('test-each');
+// phiot.mount('test-img');
+// phiot.mount('test-timer');
+phiot.mount('test-input');
 </script>
