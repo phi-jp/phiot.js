@@ -14,17 +14,15 @@
 
     scripts.forEach(function(script) {
       var html = script.innerHTML;
-      html = '<app>' + html + '</app>';
+      var dom = document.createElement('div');
 
-      var parser = new DOMParser();
-      var dom = parser.parseFromString(html, 'text/xml');
-      var root = dom.children[0];
-      var tags = Array.prototype.slice.call(root.children);
+      html = html.replace(/src=/g, 'phiot-src=');
+      dom.innerHTML = html;
+
+      var tags = Array.prototype.slice.call(dom.children);
 
       tags.forEach(function(tag) {
-        if (tags[0].tagName === 'parseerror') return ;
-
-        self.templates[tag.tagName] = new Template(tag);
+        self.templates[tag.localName] = new Template(tag);
       });
     });
   };
@@ -92,7 +90,7 @@
           element.removeAttribute(attr.name);
 
           var func = attrfuncs[attr.name] || attrfuncs['*'];
-          func.call(this, this, code, element);
+          func.call(this, this, attr.name, code, element);
         }
       }, this);
 
@@ -112,13 +110,15 @@
   };
 
   var attrfuncs = {
-    '*': function() {
-
+    '*': function(tag, key, value, element) {
+      key = key.replace('phiot-', '');
+      value = eval(value);
+      element.setAttribute(key, value);
     },
-    'onclick': function(tag, value, element) {
+    'onclick': function(tag, key, value, element) {
       element.onclick = new Function(value).bind(tag);
     },
-    'each': function(tag, value, element) {
+    'each': function(tag, key, value, element) {
       var result = eval(value);
 
       var parent = element.parentNode;
