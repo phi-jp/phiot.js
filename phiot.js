@@ -7,6 +7,15 @@
     return Array.prototype.slice.call(arr);
   };
 
+  var unescapeHTML = function(str) {
+    return str
+      .replace(/(&lt;)/g, '<')
+      .replace(/(&gt;)/g, '>')
+      .replace(/(&quot;)/g, '"')
+      .replace(/(&#39;)/g, "'")
+      .replace(/(&amp;)/g, '&');
+  };
+
   var globalEval = function(code, opts, self) {
     // var func = new Function(opts, 'return (' + code + ');').bind(self);
     // return func();
@@ -155,6 +164,7 @@
       // other
       else {
         key = key.replace('phiot-', '');
+
         value = eval(value);
         element.setAttribute(key, value);
       }
@@ -202,6 +212,8 @@
       this.content = content && content.innerHTML;
       this.style = style && style.innerHTML;
       this.script = script && script.innerHTML;
+
+      this.script = unescapeHTML(this.script);
     }
     else {
       this.content = tag;
@@ -209,7 +221,7 @@
       this.script = '';
     }
 
-    this.func = new Function(this.script);
+    // this.func = new Function(this.script);
   };
 
   window.phiot = phiot;
