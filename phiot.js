@@ -66,15 +66,26 @@
     template.func.call(this);
 
     this._template = template;
+    var content = template.content + '<style>' + template.style + '</style>';
+    this.domElement.innerHTML = content;
+
     this.update();
 
     this.onmount && this.onmount();
   };
 
   Tag.prototype.update = function() {
-    var template = this._template;
-    var content = template.content + '<style>' + template.style + '</style>';
-    this.domElement.innerHTML = content;
+    // supported each
+    var eachElements = this.domElement.querySelectorAll('[_each]');
+    eachElements = Array.prototype.slice.call(eachElements);
+    eachElements.forEach(function(elm) {
+      var i = elm.getAttribute('_each');
+      if (i == 0) {
+        var origin = elm.__origin;
+        elm.parentNode.insertBefore(origin, elm);
+      }
+      elm.remove();
+    });
 
     var elements = this.domElement.querySelectorAll('*');
     elements = Array.prototype.slice.call(elements);
@@ -94,13 +105,19 @@
         }
       }, this);
 
+      // when each
+      if (!element.parentNode) return ;
+
       // content
       var childNodes = Array.prototype.slice.call(element.childNodes);
       var texts = childNodes.filter(function(node) {
         return node.nodeType === 3;
       });
       texts.forEach(function(textNode) {
-        textNode.textContent = textNode.textContent.replace(/{(.*)}/mg, function(a, b) {
+        if (!textNode.__temp) {
+          textNode.__temp = textNode.textContent;
+        }
+        textNode.textContent = textNode.__temp.replace(/{(.*)}/mg, function(a, b) {
           return eval(b);
         }.bind(this));
       }, this);
@@ -125,12 +142,10 @@
 
     'each': function(tag, key, value, element) {
       var result = eval(value);
-
       var parent = element.parentNode;
-
       var template = new Template(element.outerHTML);
 
-      result.forEach(function(data) {
+      result.forEach(function(data, i) {
         var cloned = element.cloneNode(true);
 
         parent.insertBefore(cloned, element);
@@ -142,9 +157,16 @@
           tag[key] = value;
         }
         tag.bind(template);
+
+        // save replace position
+        cloned.setAttribute('_each', i);
+        if (i==0) {
+          cloned.__origin = element;
+        }
       });
 
       element.remove();
+      element.setAttribute('each', '{' + value + '}');
     },
   };
 

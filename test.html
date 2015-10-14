@@ -62,7 +62,7 @@
 
 <test-each>
   <phiot-content type='jade'>
-    <button onclick='{this.click()}'>add</button>
+    <button onclick='{this.click}'>add</button>
     <ul>
       <li>[ start ]</li>
       <li each='{this.list}'>[ {this.title} ]</li>
@@ -111,7 +111,6 @@
   </phiot-script>
 </test-timer>
 
-
 <test-input>
   <phiot-content type='jade'>
     <input type='text' oninput='{this.input}' value='{this.value}' />
@@ -121,8 +120,6 @@
     this.value = 'hoge';
 
     this.input = function(e) {
-      console.log(e);
-
       this.value = e.target.value;
       this.update();
     };
@@ -134,9 +131,9 @@
 <script>
 phiot.init();
 phiot.mount('test-mount');
-// phiot.mount('test-countup');
-// phiot.mount('test-each');
-// phiot.mount('test-img');
-// phiot.mount('test-timer');
+phiot.mount('test-countup');
+phiot.mount('test-each');
+phiot.mount('test-img');
+phiot.mount('test-timer');
 phiot.mount('test-input');
 </script>
