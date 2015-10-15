@@ -163,7 +163,11 @@
     '*': function(tag, key, value, element) {
       // event
       if (/^on/.test(key)) {
-        element[key] = new Function('e', value+'(e)').bind(this);
+        var v = eval(value);
+        var func = function(e) {
+          v.call(this, e);
+        }.bind(this);
+        element[key] = func;
       }
       // other
       else {
