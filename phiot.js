@@ -52,9 +52,7 @@
     req.send('');
   };
 
-  window.globalEval = globalEval;
-
-  phiot.init = function() {
+  phiot.init = function(callback) {
     var self = this;
     this.templates = {};
 
@@ -80,10 +78,19 @@
       });
     };
 
+    var count = 0;
+    var counter = 0;
+
     scripts.forEach(function(script) {
       if (script.src) {
+        count++;
         GET(script.src, function(text) {
           _ontemplate(text);
+          counter++;
+
+          if (count === counter) {
+            callback && callback();
+          }
         });
       }
       else {
@@ -100,6 +107,28 @@
     var tag = document._tag;
     tag.mount(query, opts);
   };
+
+  phiot._mainCallbacks = [];
+  phiot.loaded = false;
+  phiot.main = function(fn) {
+    if (phiot.loaded) {
+      fn();
+    }
+    else {
+      phiot._mainCallbacks.push(fn);
+    }
+  };
+
+  window.addEventListener('DOMContentLoaded', function() {
+    phiot.init(function() {
+      phiot.loaded = true;
+
+      phiot._mainCallbacks.forEach(function(fn) {
+        fn();
+      });
+      phiot._mainCallbacks.length = 0;
+    });
+  });
 
   /*
    *

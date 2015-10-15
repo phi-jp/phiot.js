@@ -21,10 +21,9 @@
 <script type='phiot/template' src='todo.phiot'></script>
 
 <script>
-phiot.init();
 
-setTimeout(function() {
+phiot.main(function() {
   phiot.mount('todo');
-}, 1000);
+});
 
 </script>
