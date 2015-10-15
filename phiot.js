@@ -250,9 +250,9 @@
    */
   var Template = function(tag) {
     if (typeof tag === 'object') {
-      var content = tag.querySelector('phiot-content')
-      var style = tag.querySelector('phiot-style');
-      var script = tag.querySelector('phiot-script');
+      var content = tag.querySelector('phiot-content') || tag.querySelector('content');
+      var style = tag.querySelector('phiot-style') || tag.querySelector('style');
+      var script = tag.querySelector('phiot-script') || tag.querySelector('script');
 
       this.content = content && content.innerHTML;
       this.style = style && style.innerHTML;
