@@ -25,6 +25,18 @@
     // document.body.appendChild(element);
     // document.body.removeChild(element);
   };
+
+  var normalizeIndent = function(text) {
+    text = text.split('\n').filter(function(line) {
+      return line.match(/\S/) != null;
+    }).join('\n');
+
+    var result = text.match(/^([\s]*).*\n/);
+    var indent = result[1];
+    text = text.replace(new RegExp('^' + indent, 'gm'), '');
+    return text;
+  };
+
   window.globalEval = globalEval;
 
   phiot.init = function() {
@@ -255,13 +267,13 @@
       var script = tag.querySelector('phiot-script') || tag.querySelector('script');
 
       if (content) {
-        this.content = content.innerHTML;
         var type = content.getAttribute('type');
         if (type === 'jade') {
-          var result = this.content.match(/^([\s]*).*\n/);
-          var indent = result[1].replace('\n', '');
-          this.content = this.content.replace(new RegExp('^' + indent, 'gm'), '');
-          this.content = jade.render(this.content, {pretty: true, doctype: 'html'})
+          var code = normalizeIndent(content.innerHTML);
+          this.content = jade.render(code, {pretty: true, doctype: 'html'})
+        }
+        else {
+          this.content = content.innerHTML;
         }
       }
 
