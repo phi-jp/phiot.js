@@ -173,6 +173,19 @@
       }
     },
 
+    'show': function(tag, key, value, element) {
+      var isShow = eval(value);
+
+      if (isShow) {
+        element.style.display = '';
+      }
+      else {
+        element.style.display = 'none';
+      }
+
+      element.setAttribute('show', '{' + value + '}');
+    },
+
     'each': function(tag, key, value, element) {
       var result = eval(value);
       var parent = element.parentNode;

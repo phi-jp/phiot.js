@@ -36,6 +36,7 @@
       <test-timer class='test'></test-timer>
       <test-input class='test'></test-input>
       <test-each-mount class='test'></test-each-mount>
+      <test-show class='test'></test-show>
     </div>
   </body>
 </html>
@@ -46,9 +47,6 @@
 <test-mount>
   <phiot-content type='jade'>
     <h2>Hello, {this.title}!</h2>
-    <p>
-    src=hoge;
-    </p>
   </phiot-content>
   <phiot-style>
     test-mount h2 {
@@ -174,6 +172,25 @@
   </phiot-script>
 </test-each-mount>
 
+<test-show>
+  <phiot-content type='jade'>
+    <h2>show</h2>
+
+    <button onclick='{this.toggle}'>toggle</button>
+    {this.isVisible}
+    <p show='{this.isVisible}'>
+      表示されてるー？
+    </p>
+  </phiot-content>
+  <phiot-script>
+    this.isVisible = true;
+    this.toggle = function(e) {
+      this.isVisible = !this.isVisible;
+      this.update();
+    };
+  </phiot-script>
+</test-show>
+
 </script>
 
 <script>
@@ -185,5 +202,6 @@ phiot.mount('test-img');
 phiot.mount('test-timer');
 phiot.mount('test-input');
 phiot.mount('test-each-mount');
+phiot.mount('test-show');
 
 </script>
