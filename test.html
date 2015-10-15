@@ -59,7 +59,7 @@
       color: blue;
     }
   </phiot-style>
-  <phiot-script type='es6'>
+  <phiot-script>
     this.title = opts.title || 'Phiot.js';
   </phiot-script>
 </test-mount>
@@ -72,7 +72,7 @@
       <button onclick='{this.click}'>count up</button>
     </p>
   </phiot-content>
-  <phiot-script type='es6'>
+  <phiot-script>
     this.count = 0;
     this.click = function() {
       this.count += 1;
@@ -91,7 +91,7 @@
       <li>[ end ]</li>
     </ul>
   </phiot-content>
-  <phiot-script type='es6'>
+  <phiot-script>
     this.list = [
       { title: 'hoge' },
       { title: 'foo' },
@@ -161,7 +161,7 @@
       <li>[ end ]</li>
     </ul>
   </phiot-content>
-  <phiot-script type='es6'>
+  <phiot-script>
     this.list = [
       { title: 'hoge' },
       { title: 'foo' },

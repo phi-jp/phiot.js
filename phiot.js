@@ -280,7 +280,7 @@
     },
 
     'each': function(tag, key, value, element) {
-      var result = eval(value);
+      var result = eval(value) || [];
       var parentNode = element.parentNode;
       var template = phiot.templates[element.localName] || (new Template(element.innerHTML));
 
@@ -322,19 +322,32 @@
 
       if (content) {
         var type = content.getAttribute('type');
-        if (type === 'jade') {
-          var code = normalizeIndent(content.innerHTML);
-          this.content = jade.render(code, {pretty: true, doctype: 'html'})
+        if (parsers.html[type]) {
+          this.content = parsers.html[type](content.innerHTML);
         }
         else {
           this.content = content.innerHTML;
         }
       }
-
-      this.style = style && style.innerHTML;
-      this.script = script && script.innerHTML;
-
-      this.script = unescapeHTML(this.script);
+      if (style) {
+        var type = style.getAttribute('type');
+        if (parsers.style[type]) {
+          this.style = parsers.style[type](style.innerHTML);
+        }
+        else {
+          this.style = style.innerHTML;
+        }
+      }
+      if (script) {
+        var type = script.getAttribute('type');
+        if (parsers.script[type]) {
+          this.script = parsers.script[type](script.innerHTML);
+        }
+        else {
+          this.script = script.innerHTML;
+        }
+        this.script = unescapeHTML(this.script);
+      }
     }
     else {
       this.content = tag;
@@ -344,6 +357,37 @@
 
     // this.func = new Function(this.script);
   };
+
+  var parsers = {
+    html: {
+      jade: function(code) {
+        code = normalizeIndent(code);
+        return jade.render(code, {pretty: true, doctype: 'html'})
+      },
+    },
+    style: {
+      less: function(code) {
+        var temp = '';
+        less.render(code, function (e, output) {
+          temp = output.css;
+        });
+        return temp;
+      },
+    },
+    script: {
+      es6: function(code) {
+        code = '(function() {\n' + code + '\n})()';
+        var result = babel.transform(code);
+        var lines = result.code.split('\n');
+
+        lines.shift();
+        lines.shift();
+        lines.shift();
+        lines.pop();
+        return lines.join('\n');
+      },
+    }
+  }
 
   window.phiot = phiot;
 

@@ -9,12 +9,15 @@
         input(type='checkbox', onchange='{this.parent.done}', checked='{this.done}')
         {this.title}
   </content>
-  <style>
-    todo h2 {
-      color: blue;
-    }
-    [done='true'] {
-      text-decoration: line-through;
+  <style type='less'>
+    todo {
+      h2 {
+        color: blue;
+      }
+      [done='true'] {
+        text-decoration: line-through;
+        color: #aaa;
+      }
     }
   </style>
   <script type='es6'>
