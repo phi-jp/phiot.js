@@ -1,18 +1,47 @@
 <todo>
   <content type='jade'>
-    h2 TODO LIST
-    div
-      input(value='hoge')
-      button(onclick='{this.add}') add
-    ul
-      li(each='{this.items}', done='{this.item.done}')
-        input(type='checkbox', onchange='{this.parent.done}', checked='{this.done}')
-        {this.title}
+    div.container
+      h1 todo | phiot.js
+      div
+        input(type='text', phiot-name='{todoInput}', value='Hello, phiot.js!', onkeydown='{this.keydown}')
+        button(, onclick='{this.add}') add
+      ul
+        li(each='{this.items}', done='{this.item.done}')
+          div(show='{!this.editing}')
+            input(type='checkbox', onchange='{this.parent.done}', checked='{this.item.done}')
+            span(onclick='{this.parent.edit}') {this.item.title}
+          div(show='{this.editing}')
+            input(type='checkbox', onchange='{this.parent.done}', checked='{this.item.done}')
+            input(phiot-name='{titleInput}', type='text', value='{this.item.title}', onblur='{this.parent.save}', onkeydown='{this.parent.save}')
   </content>
   <style type='less'>
     todo {
-      h2 {
+      .container {
+        margin: 0px auto;
+        max-width: 800px;
+        width: 90%;
+      }
+      h1 {
         color: blue;
+      }
+      ul {
+        list-style: none;
+        margin: 1rem 0px;
+        padding: 0px;
+        li {
+          margin-bottom: 1rem;
+          border-bottom: 1px solid #aaa;
+          line-height: 2rem;
+          font-size: 1.2rem;
+        }
+      }
+      input[type='text'] {
+        padding: 2px 4px;
+        font-size: 1rem;
+      }
+      input[type='checkbox'] {
+        margin-right: 10px;
+        margin-bottom: 10px;
       }
       [done='true'] {
         text-decoration: line-through;
@@ -20,7 +49,7 @@
       }
     }
   </style>
-  <script type='es6'>
+  <script>
     this.items = [
       {
         title: 'hoge',
@@ -29,15 +58,38 @@
     ];
 
     this.add = function() {
-      var input = this.domElement.querySelector('input');
       this.items.push({
-        title: input.value,
+        title: this.todoInput.value,
         done: false,
       });
+
+      this.todoInput.value = '';
+    };
+
+    this.edit = function() {
+      this.editing = true;
+      this.update();
+      this.titleInput.focus();
+    };
+
+    this.save = function(e) {
+      if (e.type === 'keydown' && e.keyCode !== 13) {
+        return ;
+      }
+
+      this.editing = false;
+      this.item.title = e.target.value;
     };
 
     this.done = function(e) {
       this.item.done = !this.item.done;
+    };
+
+    this.keydown = function(e) {
+      if (e.keyCode === 13 && e.metaKey) {
+        this.add();
+        return false;
+      }
     };
   </script>
 </todo>

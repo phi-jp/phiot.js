@@ -309,6 +309,10 @@
       element.remove();
       element.setAttribute('each', '{' + value + '}');
     },
+
+    'phiot-name': function(tag, key, value, element) {
+      tag[value] = element;
+    },
   };
 
   /*
