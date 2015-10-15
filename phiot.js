@@ -254,7 +254,17 @@
       var style = tag.querySelector('phiot-style') || tag.querySelector('style');
       var script = tag.querySelector('phiot-script') || tag.querySelector('script');
 
-      this.content = content && content.innerHTML;
+      if (content) {
+        this.content = content.innerHTML;
+        var type = content.getAttribute('type');
+        if (type === 'jade') {
+          var result = this.content.match(/^([\s]*).*\n/);
+          var indent = result[1].replace('\n', '');
+          this.content = this.content.replace(new RegExp('^' + indent, 'gm'), '');
+          this.content = jade.render(this.content, {pretty: true, doctype: 'html'})
+        }
+      }
+
       this.style = style && style.innerHTML;
       this.script = script && script.innerHTML;
 

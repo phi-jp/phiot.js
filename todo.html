@@ -9,6 +9,7 @@
     <title>${title}</title>
     <meta name="description" content="${description}" />
     
+    <script src='http://cdnjs.cloudflare.com/ajax/libs/jade/1.11.0/jade.js'></script>
     <script src='phiot.js'></script>
     <style>
     .test-wrap {
@@ -33,17 +34,14 @@
 
 <app>
   <content type='jade'>
-    <h2>TODO LIST</h2>
-    <div>
-      <input value='hoge' />
-      <button onclick='{this.add}'>add</button>
-    </div>
-    <ul>
-      <li each='{this.items}' done='{this.item.done}'>
-        <input type='checkbox' onchange='{this.parent.done}' checked='{this.done}' />
+    h2 TODO LIST
+    div
+      input(value='hoge')
+      button(onclick='{this.add}') add
+    ul
+      li(each='{this.items}', done='{this.item.done}')
+        input(type='checkbox', onchange='{this.parent.done}', checked='{this.done}')
         {this.title}
-      </li>
-    </ul>
   </content>
   <style>
     app h2 {
