@@ -1,0 +1,70 @@
+<typing>
+  <content type='jade'>
+    div.container
+      h1 Typing | phiot.js
+
+      h2
+        span(style='color:#444') {this.left}
+        span(style='color:#aaa') {this.right}
+      p {this.question.hint}
+      input(type='text', oninput='{this.ontype}')
+  </content>
+  <style type='less'>
+    typing {
+      .container {
+        margin: 0px auto;
+        max-width: 640px;
+        width: 90%;
+      }
+    }
+  </style>
+  <script>
+    this.questions = [
+      {
+        word: 'if',
+        hint: '分岐処理のときに使うよ',
+      },
+      {
+        word: 'else',
+        hint: '分岐処理のときに使うよ',
+      },
+      {
+        word: 'for',
+        hint: '繰り返し処理のときに使うよ',
+      },
+      {
+        word: 'var',
+        hint: '変数宣言するときに使うよ',
+      },
+      {
+        word: 'int',
+        hint: '数字を表すよ',
+      },
+    ];
+    this.ontype = function(e) {
+      var v = e.target.value;
+
+      if (this.question.word.indexOf(v) !== -1) {
+        this.left = v;
+        this.right = this.question.word.replace(v, '');
+      }
+      else {
+        this.left = '';
+        this.right = this.question.word;
+      }
+
+      if (this.question.word === e.target.value) {
+        e.target.value = '';
+        this.setQuestion();
+      }
+    };
+    this.setQuestion = function() {
+      var i = Math.floor(Math.random()*this.questions.length);
+      this.question = this.questions[i];
+
+      this.left = '';
+      this.right = this.question.word;
+    };
+    this.setQuestion();
+  </script>
+</typing>

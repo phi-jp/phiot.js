@@ -31,7 +31,7 @@
       return line.match(/\S/) != null;
     }).join('\n');
 
-    var result = text.match(/^([\s]*).*\n/);
+    var result = text.match(/^([\s]*).*/);
     var indent = result[1];
     text = text.replace(new RegExp('^' + indent, 'gm'), '');
     return text;
