@@ -1,0 +1,31 @@
+{
+  "name": "phiot.js",
+  "version": "0.0.1",
+  "description": "framework for sigle page application",
+  "main": "build/phiot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/phi-jp/phiot.js.git"
+  },
+  "keywords": [
+    "javascript"
+  ],
+  "author": "phi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/phi-jp/phiot.js/issues"
+  },
+  "homepage": "https://github.com/phi-jp/phiot.js",
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-util": "^3.0.3",
+    "gulp-webserver": "^0.9.1",
+    "ip": "^0.3.3"
+  },
+  "scripts": {
+    "start": "node src/index.js"
+  }
+}
