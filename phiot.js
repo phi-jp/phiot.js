@@ -175,14 +175,7 @@
 
     'show': function(tag, key, value, element) {
       var isShow = eval(value);
-
-      if (isShow) {
-        element.style.display = '';
-      }
-      else {
-        element.style.display = 'none';
-      }
-
+      element.style.display = (isShow) ? '' : 'none';
       element.setAttribute('show', '{' + value + '}');
     },
 
