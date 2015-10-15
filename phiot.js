@@ -37,6 +37,21 @@
     return text;
   };
 
+  var GET = function(url, fn) {
+    var req = new XMLHttpRequest();
+
+    req.onreadystatechange = function() {
+      if (req.readyState === 4) {
+        if (req.status === 0 || req.status === 200) {
+          fn(req.responseText);
+        }
+      }
+    };
+
+    req.open('GET', url, true);
+    req.send('');
+  };
+
   window.globalEval = globalEval;
 
   phiot.init = function() {
@@ -48,8 +63,7 @@
       return script.type === 'phiot/template';
     });
 
-    scripts.forEach(function(script) {
-      var html = script.innerHTML;
+    var _ontemplate = function(html) {
       var dom = document.createElement('div');
 
       // replace attribute only
@@ -64,6 +78,17 @@
       tags.forEach(function(tag) {
         self.templates[tag.localName] = new Template(tag);
       });
+    };
+
+    scripts.forEach(function(script) {
+      if (script.src) {
+        GET(script.src, function(text) {
+          _ontemplate(text);
+        });
+      }
+      else {
+        _ontemplate(script.innerHTML);
+      }
     });
   };
 

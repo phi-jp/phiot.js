@@ -18,53 +18,13 @@
 </html>
 
 
-<script type='phiot/template'>
-
-<todo>
-  <content type='jade'>
-    h2 TODO LIST
-    div
-      input(value='hoge')
-      button(onclick='{this.add}') add
-    ul
-      li(each='{this.items}', done='{this.item.done}')
-        input(type='checkbox', onchange='{this.parent.done}', checked='{this.done}')
-        {this.title}
-  </content>
-  <style>
-    todo h2 {
-      color: blue;
-    }
-    [done='true'] {
-      text-decoration: line-through;
-    }
-  </style>
-  <script type='es6'>
-    this.items = [
-      {
-        title: 'hoge',
-        done: false,
-      }
-    ];
-
-    this.add = function() {
-      var input = this.domElement.querySelector('input');
-      this.items.push({
-        title: input.value,
-        done: false,
-      });
-    };
-
-    this.done = function(e) {
-      this.item.done = !this.item.done;
-    };
-  </script>
-</todo>
-
-</script>
+<script type='phiot/template' src='todo.phiot'></script>
 
 <script>
 phiot.init();
-phiot.mount('todo');
+
+setTimeout(function() {
+  phiot.mount('todo');
+}, 1000);
 
 </script>
