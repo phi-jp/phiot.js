@@ -122,8 +122,17 @@
 
     var update = function(element) {
       // attribute
-      var attributes = toArray(element.attributes);
+      if (!element.__tempAttribute) {
+        element.__tempAttribute = toArray(element.attributes);
+      }
+      var attributes = element.__tempAttribute;
+      var hasEach = attributes.some(function(attr) {
+        return attr.name === 'each';
+      });
       attributes.forEach(function(attr) {
+        // each をもつ場合は each 以外の属性は無視
+        if (hasEach && attr.name !== 'each') return ;
+
         var result = attr.textContent.match(/^{(.*)}$/);
         if (result) {
           var code = result[1];
@@ -189,6 +198,21 @@
       element.setAttribute('show', '{' + value + '}');
     },
 
+    'checked': function(tag, key, value, element) {
+      var is = eval(value);
+
+      if (is) {
+        element.setAttribute(key, '');
+      }
+      else {
+        element.removeAttribute(key);
+      }
+    },
+
+    'class': function(tag, key, value, element) {
+
+    },
+
     'each': function(tag, key, value, element) {
       var result = eval(value);
       var parentNode = element.parentNode;
@@ -206,6 +230,7 @@
           var value = data[key];
           childTag[key] = value;
         }
+        childTag.item = data;
         childTag.bind(template, data);
 
         // save replace position
