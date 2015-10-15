@@ -44,7 +44,7 @@
     this.ontype = function(e) {
       var v = e.target.value;
 
-      if (this.question.word.indexOf(v) !== -1) {
+      if (this.question.word.indexOf(v) === 0) {
         this.left = v;
         this.right = this.question.word.replace(v, '');
       }
