@@ -120,11 +120,7 @@
       elm.remove();
     });
 
-    var elements = this.domElement.querySelectorAll('*');
-    elements = toArray(elements);
-    elements.unshift(this.domElement);
-
-    elements.forEach(function(element) {
+    var update = function(element) {
       // attribute
       var attributes = toArray(element.attributes);
       attributes.forEach(function(attr) {
@@ -154,7 +150,15 @@
           return eval(b);
         }.bind(this));
       }, this);
-    }, this);
+
+      // 再帰処理
+      var children = toArray(element.children);
+      children.forEach(function(child) {
+        update(child);
+      }, this);
+    }.bind(this);
+
+    update(this.domElement);
 
     this.onupdate && this.onupdate();
   };
@@ -165,9 +169,9 @@
 
       // event
       if (typeof v === 'function') {
-        var v = eval(value);
         var func = function(e) {
           v.call(this, e);
+          this.update();
         }.bind(this);
         element[key] = func;
       }
@@ -187,21 +191,22 @@
 
     'each': function(tag, key, value, element) {
       var result = eval(value);
-      var parent = element.parentNode;
-      var template = phiot.templates[element.localName] || (new Template(element.outerHTML));
+      var parentNode = element.parentNode;
+      var template = phiot.templates[element.localName] || (new Template(element.innerHTML));
 
       result.forEach(function(data, i) {
         var cloned = element.cloneNode(true);
 
-        parent.insertBefore(cloned, element);
-        // parent.appendChild(cloned);
+        parentNode.insertBefore(cloned, element);
+        // parentNode.appendChild(cloned);
 
-        var tag = new Tag(cloned);
+        var childTag = new Tag(cloned);
+        childTag.parent = tag;
         for (var key in data) {
           var value = data[key];
-          tag[key] = value;
+          childTag[key] = value;
         }
-        tag.bind(template, data);
+        childTag.bind(template, data);
 
         // save replace position
         cloned.setAttribute('_each', i);
