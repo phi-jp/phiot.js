@@ -1,0 +1,81 @@
+<!doctype html>
+ 
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    
+    <title>${title}</title>
+    <meta name="description" content="${description}" />
+    
+    <script src='phiot.js'></script>
+    <style>
+    .test-wrap {
+      width: 100%;
+    }
+    img {
+      box-shadow: 0px 0px 4px 0px #aaa;
+    }
+
+    [done='true'] {
+      text-decoration: line-through;
+    }
+    </style>
+  </head>
+  <body>
+    <app></app>
+  </body>
+</html>
+
+
+<script type='phiot/template'>
+
+<app>
+  <content type='jade'>
+    <h2>TODO LIST</h2>
+    <div>
+      <input value='hoge' />
+      <button onclick='{this.add}'>add</button>
+    </div>
+    <ul>
+      <li each='{this.items}' done='{this.item.done}'>
+        <input type='checkbox' onchange='{this.parent.done}' checked='{this.done}' />
+        {this.title}
+      </li>
+    </ul>
+  </content>
+  <style>
+    app h2 {
+      color: blue;
+    }
+  </style>
+  <script type='es6'>
+    this.items = [
+      {
+        title: 'hoge',
+        done: false,
+      }
+    ];
+
+    this.add = function() {
+      var input = this.domElement.querySelector('input');
+      this.items.push({
+        title: input.value,
+        done: false,
+      });
+    };
+
+    this.done = function(e) {
+      this.item.done = !this.item.done;
+    };
+  </script>
+</app>
+
+</script>
+
+<script>
+phiot.init();
+phiot.mount('app');
+
+</script>
