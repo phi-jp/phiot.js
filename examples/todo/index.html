@@ -13,14 +13,14 @@
     <script src='../../phiot.js'></script>
   </head>
   <body>
-    <app></app>
+    <todo></todo>
   </body>
 </html>
 
 
 <script type='phiot/template'>
 
-<app>
+<todo>
   <content type='jade'>
     h2 TODO LIST
     div
@@ -32,7 +32,7 @@
         {this.title}
   </content>
   <style>
-    app h2 {
+    todo h2 {
       color: blue;
     }
     [done='true'] {
@@ -59,12 +59,12 @@
       this.item.done = !this.item.done;
     };
   </script>
-</app>
+</todo>
 
 </script>
 
 <script>
 phiot.init();
-phiot.mount('app');
+phiot.mount('todo');
 
 </script>
