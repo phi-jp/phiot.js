@@ -161,8 +161,10 @@
 
   var attrfuncs = {
     '*': function(tag, key, value, element) {
+      var v = eval(value);
+
       // event
-      if (/^on/.test(key)) {
+      if (typeof v === 'function') {
         var v = eval(value);
         var func = function(e) {
           v.call(this, e);
@@ -173,8 +175,7 @@
       else {
         key = key.replace('phiot-', '');
 
-        value = eval(value);
-        element.setAttribute(key, value);
+        element.setAttribute(key, v);
       }
     },
 
