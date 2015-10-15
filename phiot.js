@@ -40,6 +40,7 @@
       var html = script.innerHTML;
       var dom = document.createElement('div');
 
+      // replace attribute only
       // html = html.replace(/src=/g, 'phiot-src=');
       html = html.replace(/<.*(src)=.*>/g, function(a, b, c) {
         return a.replace('src', 'phiot-src');
