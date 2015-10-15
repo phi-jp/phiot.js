@@ -40,7 +40,10 @@
       var html = script.innerHTML;
       var dom = document.createElement('div');
 
-      html = html.replace(/src=/g, 'phiot-src=');
+      // html = html.replace(/src=/g, 'phiot-src=');
+      html = html.replace(/<.*(src)=.*>/g, function(a, b, c) {
+        return a.replace('src', 'phiot-src');
+      });
       dom.innerHTML = html;
 
       var tags = toArray(dom.children);
